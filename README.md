@@ -90,10 +90,10 @@ Spatial clustering identification of poor-performing areas
 - **GIS Mapping**: QGIS or ArcGIS
 - **Data Visualization**: Tableau, Power BI, or programming libraries (matplotlib, ggplot2, plotly)
 
-### Key Libraries (if using Python)
+### Key Libraries ( Python)
 ```python
 # Python
-pandas, numpy, scipy, geopandas, matplotlib, seaborn, plotly, folium
+pandas, numpy, geopandas, matplotlib, seaborn, plotly, 
 
 ```
 
