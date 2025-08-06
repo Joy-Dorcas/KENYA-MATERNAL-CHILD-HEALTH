@@ -1,6 +1,21 @@
 # KENYA-MATERNAL-CHILD-HEALTH
 # Equity in Maternal and Child Health Services Access Across Kenyan Counties
 
+## Problem Statement
+
+Despite significant investments in healthcare infrastructure and policy reforms, Kenya continues to face alarming disparities in maternal and child health outcomes across its 47 counties. **Kenya's maternal mortality ratio of 342 deaths per 100,000 live births remains nearly twice the global average, while under-5 mortality rates vary dramatically from 24 deaths per 1,000 live births in Nairobi to over 94 deaths per 1,000 in Mandera County** - a four-fold difference that represents thousands of preventable deaths annually.
+
+These disparities are not merely statistical variations but reflect **systematic inequities in healthcare access, quality, and utilization** that disproportionately affect rural, pastoralist, and economically disadvantaged communities. Current health planning and resource allocation decisions are often made without comprehensive, county-specific evidence of where the greatest needs exist, leading to:
+
+- **Misaligned resource distribution**: Counties with the highest mortality rates may not receive proportional health investments
+- **Ineffective intervention targeting**: One-size-fits-all approaches fail to address county-specific barriers to care
+- **Persistent equity gaps**: Without data-driven identification of underserved populations, existing disparities continue to widen
+- **Suboptimal SDG progress**: Kenya risks falling short of Sustainable Development Goal 3 targets for maternal and child health by 2030
+
+**The critical gap is the lack of systematic, county-level analysis that identifies specific disparities, quantifies equity gaps, and provides actionable insights for targeted interventions.** While national-level statistics show overall progress, they mask the reality that millions of women and children in certain counties face health outcomes comparable to the world's poorest nations, even as others approach middle-income country standards.
+
+This analysis addresses this evidence gap by leveraging the most recent comprehensive health data to map inequities, identify priority areas for intervention, and provide the analytical foundation for evidence-based health policy and resource allocation decisions that can save lives and reduce preventable suffering.
+
 ## Project Overview
 
 This project analyzes disparities in maternal and child health outcomes and service utilization across Kenya's 47 counties, with a focus on identifying underserved populations and informing targeted interventions.
