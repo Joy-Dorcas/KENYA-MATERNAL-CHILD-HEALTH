@@ -65,7 +65,7 @@ def load_kenya_county_data():
     np.random.seed(42)  # For reproducibility
     n_counties = len(counties)
     
-    # Create realistic data based on Kenya's actual patterns
+    # Data based on Kenya's actual patterns
     data = {
         'County': counties,
         
@@ -98,10 +98,9 @@ def load_kenya_county_data():
         'Health_budget_per_capita': np.random.normal(2500, 1200, n_counties).clip(800, 8000),
     }
     
-    # Add some realistic correlations
+   
     df = pd.DataFrame(data)
     
-    # Urban counties (Nairobi, Mombasa) should have better outcomes
     urban_counties = ['Nairobi', 'Mombasa']
     for county in urban_counties:
         idx = df[df['County'] == county].index[0]
@@ -115,7 +114,7 @@ def load_kenya_county_data():
         df.loc[idx, 'Poverty_rate_pct'] *= 0.4
         df.loc[idx, 'Rural_population_pct'] *= 0.2
     
-    # Northern counties (Mandera, Wajir, Garissa) should have worse outcomes
+
     northern_counties = ['Mandera', 'Wajir', 'Garissa', 'Turkana', 'Marsabit']
     for county in northern_counties:
         if county in df['County'].values:
@@ -129,8 +128,7 @@ def load_kenya_county_data():
             df.loc[idx, 'Female_literacy_pct'] *= 0.6
             df.loc[idx, 'Poverty_rate_pct'] *= 1.8
             df.loc[idx, 'Stunting_pct'] *= 1.8
-    
-    # Apply realistic bounds after adjustments - Fixed approach
+   
     bounds = {
         'MMR_per_100k': (80, 900),
         'IMR_per_1000': (8, 90),
@@ -143,7 +141,6 @@ def load_kenya_county_data():
         'Stunting_pct': (5, 60),
     }
     
-    # Apply bounds using individual column clipping
     for column, (min_val, max_val) in bounds.items():
         if column in df.columns:
             df[column] = df[column].clip(lower=min_val, upper=max_val)
@@ -165,8 +162,7 @@ def create_regional_groupings(df):
         'Nyanza': ['Siaya', 'Kisumu', 'Homa Bay', 'Migori', 'Kisii', 'Nyamira'],
         'Nairobi': ['Nairobi']
     }
-    
-    # Create reverse mapping
+ 
     county_to_region = {}
     for region, counties in regional_mapping.items():
         for county in counties:
@@ -175,24 +171,22 @@ def create_regional_groupings(df):
     df['Region'] = df['County'].map(county_to_region)
     return df
 
-# Load the data
+
 print("📊 Creating Kenya county-level health data...")
 kenya_data = load_kenya_county_data()
 kenya_data = create_regional_groupings(kenya_data)
 
-# Save raw data
+
 kenya_data.to_csv('data/raw/kenya_county_health_data.csv', index=False)
 
 print(f"✅ Data loaded successfully! Shape: {kenya_data.shape}")
 print(f"Columns: {list(kenya_data.columns)}")
 
-# ========================================
-# END OF SECTION 1: DATA ACQUISITION
-# ========================================
 
-# ========================================
+# END OF SECTION 1: DATA ACQUISITION
+
 # SECTION 2: EXPLORATORY DATA ANALYSIS
-# ========================================
+
 
 print("\n🔍 Starting Exploratory Data Analysis...")
 
@@ -204,7 +198,7 @@ print(kenya_data.describe())
 # Missing values check
 print(f"\n🔍 Missing values: {kenya_data.isnull().sum().sum()}")
 
-# Create summary statistics by region
+#summary statistics by region
 regional_summary = kenya_data.groupby('Region').agg({
     'MMR_per_100k': ['mean', 'std', 'min', 'max'],
     'U5MR_per_1000': ['mean', 'std', 'min', 'max'],
@@ -217,17 +211,14 @@ print("\n🌍 REGIONAL SUMMARY:")
 print("="*50)
 print(regional_summary)
 
-# ========================================
-# END OF SECTION 2: EXPLORATORY DATA ANALYSIS  
-# ========================================
 
-# ========================================
+# END OF SECTION 2: EXPLORATORY DATA ANALYSIS  
+
 # SECTION 3: KEY INDICATOR VISUALIZATIONS
-# ========================================
 
 print("\n🎨 Creating Key Indicator Visualizations...")
 
-# Set up the color palette
+#color palette
 colors = ['#2E86AB', '#A23B72', '#F18F01', '#C73E1D', '#593E2E', '#8B5A3C', '#6A994E', '#577590']
 
 # 1. MATERNAL MORTALITY RATIO BY COUNTY (Horizontal Bar Chart)
@@ -239,7 +230,7 @@ kenya_sorted = kenya_data.sort_values('MMR_per_100k', ascending=True)
 bars = ax.barh(kenya_sorted['County'], kenya_sorted['MMR_per_100k'], 
                color=plt.cm.RdYlBu_r(kenya_sorted['MMR_per_100k']/kenya_sorted['MMR_per_100k'].max()))
 
-# Add value labels
+# value labels
 for i, bar in enumerate(bars):
     width = bar.get_width()
     ax.text(width + 5, bar.get_y() + bar.get_height()/2, 
@@ -249,7 +240,7 @@ ax.set_xlabel('Maternal Mortality Ratio (per 100,000 live births)', fontsize=12,
 ax.set_ylabel('County', fontsize=12, fontweight='bold')
 ax.set_title('Maternal Mortality Ratio by County\nKenya 2022', fontsize=16, fontweight='bold', pad=20)
 
-# Add national average line
+# national average line
 national_avg = kenya_data['MMR_per_100k'].mean()
 ax.axvline(national_avg, color='red', linestyle='--', linewidth=2, alpha=0.8, 
            label=f'National Average ({national_avg:.0f})')
@@ -275,7 +266,7 @@ ax1.set_ylabel('Infant Mortality Rate (per 1,000 live births)', fontsize=12, fon
 ax1.set_title('Infant Mortality Rate by County\n(Ranked from Highest to Lowest)', fontsize=14, fontweight='bold')
 ax1.grid(axis='y', alpha=0.3)
 
-# Add national average line
+#  national average line
 national_avg_imr = kenya_data['IMR_per_1000'].mean()
 ax1.axhline(national_avg_imr, color='blue', linestyle='--', linewidth=2, alpha=0.8,
             label=f'National Average ({national_avg_imr:.1f})')
@@ -291,7 +282,7 @@ ax2.set_ylabel('Under-5 Mortality Rate (per 1,000 live births)', fontsize=12, fo
 ax2.set_title('Under-5 Mortality Rate by County\n(Ranked from Highest to Lowest)', fontsize=14, fontweight='bold')
 ax2.grid(axis='y', alpha=0.3)
 
-# Add national average line
+# national average line
 national_avg_u5mr = kenya_data['U5MR_per_1000'].mean()
 ax2.axhline(national_avg_u5mr, color='blue', linestyle='--', linewidth=2, alpha=0.8,
             label=f'National Average ({national_avg_u5mr:.1f})')
@@ -315,7 +306,7 @@ ax1.set_ylabel('ANC 4+ Visits (%)', fontweight='bold')
 ax1.set_title('ANC Coverage vs Poverty Rate', fontweight='bold', fontsize=14)
 ax1.grid(alpha=0.3)
 
-# Add trend line
+# trend line
 z = np.polyfit(kenya_data['Poverty_rate_pct'], kenya_data['ANC_4_visits_pct'], 1)
 p = np.poly1d(z)
 ax1.plot(kenya_data['Poverty_rate_pct'], p(kenya_data['Poverty_rate_pct']), 
@@ -329,7 +320,7 @@ ax2.set_ylabel('Skilled Birth Attendance (%)', fontweight='bold')
 ax2.set_title('Skilled Birth Attendance vs Rural Population', fontweight='bold', fontsize=14)
 ax2.grid(alpha=0.3)
 
-# Add trend line
+#trend line
 z = np.polyfit(kenya_data['Rural_population_pct'], kenya_data['Skilled_birth_attendance_pct'], 1)
 p = np.poly1d(z)
 ax2.plot(kenya_data['Rural_population_pct'], p(kenya_data['Rural_population_pct']), 
@@ -343,7 +334,7 @@ ax3.set_ylabel('Full Immunization (%)', fontweight='bold')
 ax3.set_title('Immunization Coverage vs Facility Density', fontweight='bold', fontsize=14)
 ax3.grid(alpha=0.3)
 
-# Add trend line
+#trend line
 z = np.polyfit(kenya_data['Health_facilities_per_10k'], kenya_data['Full_immunization_pct'], 1)
 p = np.poly1d(z)
 ax3.plot(kenya_data['Health_facilities_per_10k'], p(kenya_data['Health_facilities_per_10k']), 
@@ -357,7 +348,7 @@ ax4.set_ylabel('Region', fontweight='bold')
 ax4.set_title('Exclusive Breastfeeding by Region', fontweight='bold', fontsize=14)
 ax4.grid(axis='x', alpha=0.3)
 
-# Add value labels
+#value labels
 for i, bar in enumerate(bars):
     width = bar.get_width()
     ax4.text(width + 0.5, bar.get_y() + bar.get_height()/2, 
@@ -369,14 +360,9 @@ plt.tight_layout()
 plt.savefig('outputs/figures/03_service_coverage_indicators.png', dpi=300, bbox_inches='tight')
 plt.show()
 
-# ========================================
 # END OF SECTION 3: KEY INDICATOR VISUALIZATIONS
-# ========================================
-
-
-# ========================================
 # SECTION 4: EQUITY AND DISPARITY ANALYSIS
-# ========================================
+
 
 print("\n⚖️ Creating Equity and Disparity Analysis...")
 
@@ -399,7 +385,7 @@ def calculate_equity_metrics(df, indicator_col):
     
     return metrics
 
-# Calculate equity metrics for key indicators
+#equity metrics for key indicators
 key_indicators = ['MMR_per_100k', 'U5MR_per_1000', 'ANC_4_visits_pct', 
                  'Skilled_birth_attendance_pct', 'Full_immunization_pct']
 
@@ -474,7 +460,7 @@ plt.show()
 # 5. CORRELATION MATRIX AND HEATMAP
 print("📊 Creating Correlation Matrix visualization...")
 
-# Select numeric columns for correlation
+# numeric columns for correlation
 numeric_cols = kenya_data.select_dtypes(include=[np.number]).columns.tolist()
 
 correlation_matrix = kenya_data[numeric_cols].corr()
@@ -493,9 +479,8 @@ plt.tight_layout()
 plt.savefig('outputs/figures/05_correlation_matrix.png', dpi=300, bbox_inches='tight')
 plt.show()
 
-# ========================================
 # END OF SECTION 4: EQUITY AND DISPARITY ANALYSIS
-# ========================================
+
 
 print("\n🎉 DATA LOADING AND INITIAL ANALYSIS COMPLETE!")
 print("✅ All basic visualizations have been generated and saved.")
@@ -513,13 +498,13 @@ print(f"- Health indicators: {len([col for col in kenya_data.columns if any(x in
 print(f"- Regions covered: {kenya_data['Region'].nunique()}")
 print(f"- No missing values: {kenya_data.isnull().sum().sum() == 0}")
 
-# ========================================
+
 # SECTION 5: ADVANCED ANALYTICS - PCA AND CLUSTERING
-# ========================================
+
 
 print("\n🔬 Creating Advanced Analytics...")
 
-# Prepare data for PCA
+# data for PCA
 indicators_for_pca = ['MMR_per_100k', 'U5MR_per_1000', 'ANC_4_visits_pct', 
                      'Skilled_birth_attendance_pct', 'Full_immunization_pct',
                      'Poverty_rate_pct', 'Female_literacy_pct', 'Rural_population_pct']
@@ -560,7 +545,7 @@ ax2.set_ylabel(f'PC2 ({explained_variance_ratio[1]:.1%} variance)', fontweight='
 ax2.set_title('PCA Score Plot (PC1 vs PC2)', fontweight='bold', fontsize=14)
 ax2.grid(alpha=0.3)
 
-# Add county labels for extreme points
+#county labels for extreme points
 for i, county in enumerate(kenya_data.loc[pca_data.index, 'County']):
     if abs(pca_result[i, 0]) > 2 or abs(pca_result[i, 1]) > 2:
         ax2.annotate(county, (pca_result[i, 0], pca_result[i, 1]), 
@@ -582,7 +567,7 @@ ax3.grid(alpha=0.3)
 ax3.axhline(y=0, color='k', linestyle='--', alpha=0.5)
 ax3.axvline(x=0, color='k', linestyle='--', alpha=0.5)
 
-# Create County Health Performance Index
+# County Health Performance Index
 health_index = (pca_result[:, 0] * explained_variance_ratio[0] + 
                 pca_result[:, 1] * explained_variance_ratio[1])
 
@@ -590,7 +575,7 @@ health_index = (pca_result[:, 0] * explained_variance_ratio[0] +
 health_index_normalized = ((health_index - health_index.min()) / 
                           (health_index.max() - health_index.min())) * 100
 
-# Add to dataframe
+# to dataframe
 kenya_data.loc[pca_data.index, 'Health_Performance_Index'] = health_index_normalized
 
 # Plot Health Performance Index
@@ -1184,4 +1169,5 @@ print(f"""
 # ========================================
 
 print("\n🎉 ANALYSIS COMPLETE! All visualizations and reports have been generated.")
+
 print("Check the outputs/ folder for all generated files.")
